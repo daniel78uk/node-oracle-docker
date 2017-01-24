@@ -9,7 +9,6 @@ version:
 build: version build-image
 
 build-image:
-	npm run build
 	docker build -t $(SERVICE_NAME):latest .
 	docker tag $(SERVICE_NAME):latest \
 		$(SERVICE_NAME):$(VERSION)

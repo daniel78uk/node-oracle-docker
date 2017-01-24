@@ -15,11 +15,8 @@ ENV NLS_DATE_FORMAT="YYYY-MM-DD"
 
 COPY ./oracle/linux/ .
 
-RUN apt-get update && \
-  apt-get install -y libaio1 && \
-  apt-get install -y build-essential \
-  apt-get install -y unzip && \
-  apt-get install -y curl && \
+RUN apt-get update
+RUN apt-get install -y libaio1 build-essential unzip curl && \
   mkdir -p opt/oracle && \
   unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle && \
   unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle && \
