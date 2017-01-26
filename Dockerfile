@@ -1,5 +1,5 @@
 # # INSTALL NODE BASE IMAGE (USING NODESOURCE WHEEZY FOR SIZE
-FROM node:wheezy
+FROM node:boron-wheezy
 
 MAINTAINER dan78uk
 
