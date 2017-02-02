@@ -16,9 +16,8 @@ ENV NLS_DATE_FORMAT="YYYY-MM-DD"
 COPY ./oracle/linux/ .
 
 RUN apt-get update
-RUN BUILD_PACKAGES="libaio1 build-essential unzip curl" && \
-  RUNTIME_PACKAGES="libaio1" && \
-  apt-get install -y $RUNTIME_PACKAGES $BUILD_PACKAGES && \
+RUN BUILD_PACKAGES="build-essential unzip curl libaio1 python-minimal git" && \
+  apt-get install -y $BUILD_PACKAGES && \
   mkdir -p opt/oracle && \
   unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle && \
   unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle && \
@@ -28,6 +27,5 @@ RUN BUILD_PACKAGES="libaio1 build-essential unzip curl" && \
   echo '/opt/oracle/instantclient/' | tee -a /etc/ld.so.conf.d/oracle_instant_client.conf && ldconfig && \
   rm -rf instantclient-basic-linux.x64-12.1.0.2.0.zip instantclient-sdk-linux.x64-12.1.0.2.0.zip && \
   AUTO_ADDED_PACKAGES=`apt-mark showauto` && \
-  apt-get remove --purge -y $BUILD_PACKAGES $AUTO_ADDED_PACKAGES && \
-  apt-get clean && \
+  # apt-get remove --purge -y $AUTO_ADDED_PACKAGES && \
   rm -rf /var/lib/apt/lists/*
