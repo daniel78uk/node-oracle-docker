@@ -1,5 +1,5 @@
 # # INSTALL NODE BASE IMAGE (USING NODESOURCE WHEEZY FOR SIZE
-FROM node:boron-wheezy
+FROM node:boron-slim
 
 MAINTAINER dan78uk
 
@@ -16,7 +16,9 @@ ENV NLS_DATE_FORMAT="YYYY-MM-DD"
 COPY ./oracle/linux/ .
 
 RUN apt-get update
-RUN apt-get install -y libaio1 build-essential unzip curl && \
+RUN BUILD_PACKAGES="libaio1 build-essential unzip curl" && \
+  RUNTIME_PACKAGES="libaio1" && \
+  apt-get install -y $RUNTIME_PACKAGES $BUILD_PACKAGES && \
   mkdir -p opt/oracle && \
   unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle && \
   unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle && \
@@ -25,4 +27,7 @@ RUN apt-get install -y libaio1 build-essential unzip curl && \
   ln -s /opt/oracle/instantclient/libocci.so.12.1 /opt/oracle/instantclient/libocci.so && \
   echo '/opt/oracle/instantclient/' | tee -a /etc/ld.so.conf.d/oracle_instant_client.conf && ldconfig && \
   rm -rf instantclient-basic-linux.x64-12.1.0.2.0.zip instantclient-sdk-linux.x64-12.1.0.2.0.zip && \
-  apt-get clean
+  AUTO_ADDED_PACKAGES=`apt-mark showauto` && \
+  apt-get remove --purge -y $BUILD_PACKAGES $AUTO_ADDED_PACKAGES && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
